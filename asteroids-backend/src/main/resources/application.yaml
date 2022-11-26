@@ -1,0 +1,4 @@
+asteroids:
+  client:
+    base-path: https://api.nasa.gov/neo/rest/v1
+    api-key: HFeWUhz1LSxcF05Ac9jbdj1B0HGPpFaxqdQNOnmh
