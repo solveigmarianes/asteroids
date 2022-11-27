@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NasaAsteroidsClientService {
@@ -71,6 +72,6 @@ public class NasaAsteroidsClientService {
                         .get(0)
                         .getMissDistance()
                         .getAstronomical()))
-                .toList();
+                .collect(Collectors.toList());
     }
 }
