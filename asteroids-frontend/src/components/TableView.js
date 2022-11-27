@@ -1,15 +1,63 @@
-import {Box, Paper, Skeleton, Stack, Typography} from "@mui/material";
+import {Alert, Box, Button, Paper, Skeleton, Snackbar, Stack, TextField, Toolbar, Typography} from "@mui/material";
 import useGetRequest from "../hooks/useGetRequest";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {DataGrid} from "@mui/x-data-grid";
 import {useNavigate} from "react-router-dom";
 
 export default function TableView() {
-    const asteroidsRequest = useGetRequest("?startDate=2015-09-08")
+    const [date, setDate] = useState("2022-11-01")
+    const [url, setUrl] = useState(`?startDate=${date}`)
+
+    const onChange = event => setDate(event.target.value)
+
+    const handleSubmit = event => {
+        event.preventDefault()
+        setUrl(`?startDate=${date}`)
+    }
+
+    return (
+        <>
+            <Paper sx={{p: 2, mt: 2}}>
+                <Stack direction="row" spacing={2} sx={{alignItems: 'center', justifyContent: 'flex-end'}}>
+                    <Box sx={{width: '80%'}}>
+                        <Typography variant="overline" component="p">
+                            Can you spot the next disaster?
+                        </Typography>
+                        <Typography component="p">
+                            Find asteroids near Earth one week from date:
+                        </Typography>
+                    </Box>
+                    <TextField
+                        id="startDate"
+                        label="Start date"
+                        type="date"
+                        defaultValue={date}
+                        sx={{width: 220}}
+                        variant="filled"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        onChange={onChange}
+                    />
+                    <Button onClick={handleSubmit} variant="contained">Find asteroids</Button>
+                </Stack>
+            </Paper>
+            <Paper>
+                <AsteroidsTable url={url}/>
+            </Paper>
+        </>
+    )
+}
+
+function AsteroidsTable({url}) {
+    const asteroidsRequest = useGetRequest(url)
+    const {data} = asteroidsRequest
+    const navigate = useNavigate();
 
     useEffect(() => {
         asteroidsRequest.execute()
-    }, [])
+    }, [url])
+
 
     const columns = [
         {
@@ -68,35 +116,37 @@ export default function TableView() {
         }
     ]
 
-    console.log(asteroidsRequest.data)
-    return (
-        <Asteroids asteroidResponse={asteroidsRequest.data} columns={columns}/>
-    )
-}
-
-function Asteroids({asteroidResponse, columns}) {
-    const navigate = useNavigate();
-    if (asteroidResponse && asteroidResponse.nearEarthObjects) {
+    if (data && data.nearEarthObjects) {
         return (
-            <DataGrid
-                autoHeight={true}
-                columns={columns}
-                rows={asteroidResponse.nearEarthObjects}
-                onCellClick={(params, event) => {
-                    event.defaultMuiPrevented = true
-                }}
-                onRowClick={(params) => {
-                    navigate(`/${params.row.id}`)
-                }}
-            />)
+            <Box sx={{mt: 2, mb: 4}}>
+                <DataGrid
+                    autoHeight={true}
+                    columns={columns}
+                    rows={data.nearEarthObjects}
+                    onCellClick={(params, event) => {
+                        event.defaultMuiPrevented = true
+                    }}
+                    onRowClick={(params) => {
+                        navigate(`/${params.row.id}`)
+                    }}
+                />
+                <Snackbar
+                    open={asteroidsRequest.isLoading}
+                    autoHideDuration={6000}
+                    anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                >
+                    <Alert severity="info">Reloading asteroids, please wait...</Alert>
+                </Snackbar>
+            </Box>
+        )
     } else return (
         <Box sx={{mt: 4, mb: 4}}>
-        <Stack spacing={1}>
-            <Skeleton variant="rectangular" height={48}/>
-            <Skeleton variant="rectangular" height={48}/>
-            <Skeleton variant="rectangular" height={48}/>
-            <Skeleton variant="rectangular" height={48}/>
-        </Stack>
-    </Box>
+            <Stack spacing={1}>
+                <Skeleton variant="rectangular" height={48}/>
+                <Skeleton variant="rectangular" height={48}/>
+                <Skeleton variant="rectangular" height={48}/>
+                <Skeleton variant="rectangular" height={48}/>
+            </Stack>
+        </Box>
     )
 }

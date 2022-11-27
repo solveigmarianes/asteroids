@@ -7,8 +7,8 @@ export default function Layout() {
             <header>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="h6" noWrap component="div">
-                            Near Earth Asteroids
+                        <Typography variant="h6" noWrap component="h1">
+                            Asteroids Near Earth
                         </Typography>
                     </Toolbar>
                 </AppBar>
