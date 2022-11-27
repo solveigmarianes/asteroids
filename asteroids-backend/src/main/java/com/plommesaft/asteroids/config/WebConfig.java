@@ -10,6 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     public void addCorsMappings(CorsRegistry corsRegistry) {
-        corsRegistry.addMapping("/**").allowedMethods("*");
+        corsRegistry.addMapping("/api/asteroids*").allowedMethods("*");
     }
 }
