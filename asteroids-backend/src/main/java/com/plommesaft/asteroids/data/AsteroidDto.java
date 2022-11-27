@@ -1,8 +1,8 @@
 package com.plommesaft.asteroids.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.math.BigDecimal;
@@ -21,17 +21,30 @@ public class AsteroidDto {
     private URI nasaJplUrl;
     private BigDecimal absoluteMagnitudeH;
     private SizeDto estimatedDiameter;
+
     private boolean isPotentiallyHazardousAsteroid;
     private List<CloseApproachDto> closeApproachData;
     //TODO private OrbitalDataDto orbitalData;
     private boolean isSentryObject;
 
-    public AsteroidDto(LinksDto links, BigInteger id, BigInteger neoReferenceId, String name, URI nasaJplUrl, SizeDto estimatedDiameter, boolean isPotentiallyHazardousAsteroid, List<CloseApproachDto> closeApproachData, boolean isSentryObject) {
+    public AsteroidDto(@JsonProperty("links") LinksDto links,
+                       @JsonProperty("id") BigInteger id,
+                       @JsonProperty("neo_reference_id") BigInteger neoReferenceId,
+                       @JsonProperty("name") String name,
+                       @JsonProperty("designation") String designation,
+                       @JsonProperty("nasa_jpl_url") URI nasaJplUrl,
+                       @JsonProperty("absolute_magnitude_h") BigDecimal absoluteMagnitudeH,
+                       @JsonProperty("estimated_diameter") SizeDto estimatedDiameter,
+                       @JsonProperty(value = "is_potentially_hazardous_asteroid") boolean isPotentiallyHazardousAsteroid,
+                       @JsonProperty("close_approach_data") List<CloseApproachDto> closeApproachData,
+                       @JsonProperty(value = "is_sentry_object") boolean isSentryObject) {
         this.links = links;
         this.id = id;
         this.neoReferenceId = neoReferenceId;
         this.name = name;
+        this.designation = designation;
         this.nasaJplUrl = nasaJplUrl;
+        this.absoluteMagnitudeH = absoluteMagnitudeH;
         this.estimatedDiameter = estimatedDiameter;
         this.isPotentiallyHazardousAsteroid = isPotentiallyHazardousAsteroid;
         this.closeApproachData = closeApproachData;
@@ -86,12 +99,12 @@ public class AsteroidDto {
         this.estimatedDiameter = estimatedDiameter;
     }
 
-    public boolean isPotentiallyHazardousAsteroid() {
+    public boolean getIsPotentiallyHazardousAsteroid() {
         return isPotentiallyHazardousAsteroid;
     }
 
-    public void setPotentiallyHazardousAsteroid(boolean potentiallyHazardousAsteroid) {
-        isPotentiallyHazardousAsteroid = potentiallyHazardousAsteroid;
+    public void setIsPotentiallyHazardousAsteroid(boolean potentiallyHazardousAsteroid) {
+        this.isPotentiallyHazardousAsteroid = potentiallyHazardousAsteroid;
     }
 
     public List<CloseApproachDto> getCloseApproachData() {
@@ -102,11 +115,27 @@ public class AsteroidDto {
         this.closeApproachData = closeApproachData;
     }
 
-    public boolean isSentryObject() {
+    public boolean getIsSentryObject() {
         return isSentryObject;
     }
 
-    public void setSentryObject(boolean sentryObject) {
+    public void setIsSentryObject(boolean sentryObject) {
         isSentryObject = sentryObject;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public BigDecimal getAbsoluteMagnitudeH() {
+        return absoluteMagnitudeH;
+    }
+
+    public void setAbsoluteMagnitudeH(BigDecimal absoluteMagnitudeH) {
+        this.absoluteMagnitudeH = absoluteMagnitudeH;
     }
 }

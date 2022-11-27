@@ -4,18 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import java.util.Date;
-
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CloseApproachDto {
-    private Date closeApproachDate;
+    private String closeApproachDate;
     private Long epochDateCloseApproach;
     private RelativeVelocityDto relativeVelocity;
     private MissDistanceDto missDistance;
     private String orbitingBody;
 
-    public CloseApproachDto(Date closeApproachDate, Long epochDateCloseApproach, RelativeVelocityDto relativeVelocity, MissDistanceDto missDistance, String orbitingBody) {
+    public CloseApproachDto(String closeApproachDate, Long epochDateCloseApproach, RelativeVelocityDto relativeVelocity, MissDistanceDto missDistance, String orbitingBody) {
         this.closeApproachDate = closeApproachDate;
         this.epochDateCloseApproach = epochDateCloseApproach;
         this.relativeVelocity = relativeVelocity;
@@ -23,11 +21,11 @@ public class CloseApproachDto {
         this.orbitingBody = orbitingBody;
     }
 
-    public Date getCloseApproachDate() {
+    public String getCloseApproachDate() {
         return closeApproachDate;
     }
 
-    public void setCloseApproachDate(Date closeApproachDate) {
+    public void setCloseApproachDate(String closeApproachDate) {
         this.closeApproachDate = closeApproachDate;
     }
 
