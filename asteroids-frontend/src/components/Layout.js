@@ -14,7 +14,7 @@ export default function Layout() {
                 </AppBar>
             </header>
             <main>
-                <Container sx={{mt: 2}}>
+                <Container sx={{mt: 2}} maxWidth={false}>
                     <Outlet/>
                 </Container>
             </main>

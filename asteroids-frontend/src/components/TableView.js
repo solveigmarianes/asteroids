@@ -1,11 +1,11 @@
-import {Paper} from "@mui/material";
+import {Box, Paper, Skeleton, Stack, Typography} from "@mui/material";
 import useGetRequest from "../hooks/useGetRequest";
 import {useEffect} from "react";
 import {DataGrid} from "@mui/x-data-grid";
 import {useNavigate} from "react-router-dom";
 
 export default function TableView() {
-    const asteroidsRequest = useGetRequest("?startDate=2020-08-09")
+    const asteroidsRequest = useGetRequest("?startDate=2015-09-08")
 
     useEffect(() => {
         asteroidsRequest.execute()
@@ -13,10 +13,10 @@ export default function TableView() {
 
     const columns = [
         {
-            field: 'isPotentiallyHazardousAsteroid',
+            field: 'is_potentially_hazardous_asteroid',
             headerName: 'Hazardous',
             sortable: true,
-            valueGetter: params => params.row.potentially_hazardous_asteroid ? 'Yes' : 'No'
+            valueGetter: params => params.row.is_potentially_hazardous_asteroid ? 'Yes' : 'No'
         },
         {
             field: 'id',
@@ -44,7 +44,7 @@ export default function TableView() {
             }
         },
         {
-            field: 'relativeVelocity',
+            field: 'relative_velocity',
             headerName: 'Relative velocity (km/h)',
             width: 170,
             sortable: true,
@@ -58,20 +58,19 @@ export default function TableView() {
             }
         },
         {
-            field: 'estimatedDiameter',
+            field: 'estimated_diameter',
             headerName: 'Estimated diameter (m)',
             width: 260,
             valueGetter: params => {
                 const {meters} = params.row.estimated_diameter
-                return `${meters.estimated_diameter_min} - ${meters.estimated_diameter_max}`
+                return `${Number.parseFloat(meters.estimated_diameter_max).toFixed(3)} m - ${Number.parseFloat(meters.estimated_diameter_max).toFixed(3)} m`
             }
         }
     ]
 
+    console.log(asteroidsRequest.data)
     return (
-        <Paper sx={{width: '100%', height: '80rem'}}>
-            <Asteroids asteroidResponse={asteroidsRequest.data} columns={columns}/>
-        </Paper>
+        <Asteroids asteroidResponse={asteroidsRequest.data} columns={columns}/>
     )
 }
 
@@ -80,6 +79,7 @@ function Asteroids({asteroidResponse, columns}) {
     if (asteroidResponse && asteroidResponse.nearEarthObjects) {
         return (
             <DataGrid
+                autoHeight={true}
                 columns={columns}
                 rows={asteroidResponse.nearEarthObjects}
                 onCellClick={(params, event) => {
@@ -89,5 +89,14 @@ function Asteroids({asteroidResponse, columns}) {
                     navigate(`/${params.row.id}`)
                 }}
             />)
-    } else return <></>
+    } else return (
+        <Box sx={{mt: 4, mb: 4}}>
+        <Stack spacing={1}>
+            <Skeleton variant="rectangular" height={48}/>
+            <Skeleton variant="rectangular" height={48}/>
+            <Skeleton variant="rectangular" height={48}/>
+            <Skeleton variant="rectangular" height={48}/>
+        </Stack>
+    </Box>
+    )
 }
